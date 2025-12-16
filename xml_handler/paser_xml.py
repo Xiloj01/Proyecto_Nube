@@ -279,5 +279,3 @@ class ParserXML:
         
         # proceso las solicitudes
         exito, msg = self.g_solicitudes.procesar_varias(cantidad)
-        
-        # no imprimo nada aca porque procesar_varias ya lo hace

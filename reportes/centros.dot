@@ -1,0 +1,12 @@
+digraph CentrosDatos {
+  rankdir=TB;
+  node [shape=box, style="rounded,filled", fillcolor=lightblue];
+  graph [bgcolor=white];
+
+  titulo [label="CENTROS DE DATOS\nCloudSync", shape=note, fillcolor=gold, fontsize=16];
+
+  DC001 [label="DC001\nDataCenter Principal\nCPU: 54/64\nRAM: 236/256 GB\nVMs: 3"];
+  titulo -> DC001;
+  DC002 [label="DC002\nDataCenter Respaldo\nCPU: 20/32\nRAM: 104/128 GB\nVMs: 2"];
+  titulo -> DC002;
+}

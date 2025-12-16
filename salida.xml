@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<resultadoCloudSync>
+  <timestamp>2025-12-16T14:46:14.763481</timestamp>
+  <estadoCentros>
+    <centro id="DC001">
+      <nombre>DataCenter Principal</nombre>
+      <recursos>
+        <cpuTotal>64</cpuTotal>
+        <cpuDisponible>54</cpuDisponible>
+        <cpuUtilizacion>15.62%</cpuUtilizacion>
+        <ramTotal>256</ramTotal>
+        <ramDisponible>236</ramDisponible>
+        <ramUtilizacion>7.81%</ramUtilizacion>
+      </recursos>
+      <cantidadVms>3</cantidadVms>
+      <cantidadContenedores>1</cantidadContenedores>
+    </centro>
+    <centro id="DC002">
+      <nombre>DataCenter Respaldo</nombre>
+      <recursos>
+        <cpuTotal>32</cpuTotal>
+        <cpuDisponible>20</cpuDisponible>
+        <cpuUtilizacion>37.50%</cpuUtilizacion>
+        <ramTotal>128</ramTotal>
+        <ramDisponible>104</ramDisponible>
+        <ramUtilizacion>18.75%</ramUtilizacion>
+      </recursos>
+      <cantidadVms>2</cantidadVms>
+      <cantidadContenedores>1</cantidadContenedores>
+    </centro>
+  </estadoCentros>
+  <estadisticas>
+    <vmsTotales>5</vmsTotales>
+    <contenedoresTotales>2</contenedoresTotales>
+  </estadisticas>
+</resultadoCloudSync>

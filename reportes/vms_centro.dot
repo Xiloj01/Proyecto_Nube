@@ -1,0 +1,13 @@
+digraph VMsCentro {
+  rankdir=TB;
+  node [shape=box, style="rounded,filled"];
+
+  centro [label="DC001\nDataCenter Principal", fillcolor=lightblue, fontsize=14];
+
+  VM002 [label="VM002\nVM-VM002\nWindows Server 2022\nCPU: 2.0/4\nRAM: 7.0/8 GB", fillcolor=lightgreen];
+  centro -> VM002;
+  REQ001 [label="REQ001\nVM-Empresa Demo\nUbuntu 22.04 LTS\nCPU: 4.0/4\nRAM: 8.0/8 GB", fillcolor=lightgreen];
+  centro -> REQ001;
+  REQ002 [label="REQ002\nBackup-Cliente Prueba\nUbuntu 22.04 LTS\nCPU: 2.0/2\nRAM: 4.0/4 GB", fillcolor=lightgreen];
+  centro -> REQ002;
+}

@@ -1,0 +1,9 @@
+digraph ContenedoresVM {
+  rankdir=TB;
+  node [shape=box, style="rounded,filled"];
+
+  vm [label="VM001\nVM-VM001", fillcolor=lightgreen, fontsize=14];
+
+  CNT001 [label="CNT001\nWebServer\nnginx:latest\nCPU: 30%\nRAM: 512 MB\nEstado: Activo", fillcolor=lightgreen];
+  vm -> CNT001;
+}

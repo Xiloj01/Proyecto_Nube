@@ -1,0 +1,9 @@
+digraph ColaSolicitudes {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled"];
+
+  inicio [label="COLA", shape=ellipse, fillcolor=gold];
+
+  vacio [label="(vacia)", shape=plaintext];
+  inicio -> vacio;
+}
