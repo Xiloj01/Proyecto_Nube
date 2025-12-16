@@ -1,4 +1,4 @@
-from estructuras.nodo import NodoSimple
+from estructuras.nodos import NodoSimple
 
 class ListaSimpleEnlazada:
     """Lista simplemente enlazada"""

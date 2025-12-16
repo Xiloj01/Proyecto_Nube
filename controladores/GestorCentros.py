@@ -1,12 +1,12 @@
 #GestorCentros.py
-from estructuras.listasimple import ListaSimple
 from modelos.centros_datos import CentroDatos
+from estructuras.listasimple import ListaSimpleEnlazada
 
 class GestorCentros:
     
     def __init__(self):
         # lista para guardar los centros
-        self.centros = ListaSimple()
+        self.centros = ListaSimpleEnlazada()
     
     def agregar_centro(self, id_c, nom, pais, ciudad, cpu, ram, almac):
         # primero verifico si ya existe

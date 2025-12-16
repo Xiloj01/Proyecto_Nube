@@ -1,42 +1,75 @@
-class Nodo:
-    def __init__(self, dato):
-        self.dato = dato
-        self.siguiente = None
+from estructuras.nodos import Nodo
 
-class ListaEnlazada:
+class ListaSimple:
+    
     def __init__(self):
-        self.primero = None
-        self.size = 0
+        self.cabeza = None
+        self.tamanio = 0
     
-    def esta_vacia(self):
-        return self.primero is None
+    def vacia(self):
+        return self.cabeza is None
     
-    def add(self, dato):
-        nuevo_nodo = Nodo(dato)
-
-        if self.esta_vacia():
-            self.primero = nuevo_nodo
-            while actual.siguiente is not None:
-                actual = actual.siguiente
-            actual.siguiente = nuevo_nodo
+    def insertar(self, elemento):
+        # ve si hay un nodo
+        nuevo = Nodo(elemento)
         
-        self.size += 1
+        # si no hay nada lo pongo de primero
+        if self.vacia():
+            self.cabeza = nuevo
+        else:
+            # si hay elementos voy al final
+            temp = self.cabeza
+            while temp.siguiente is not None:
+                temp = temp.siguiente
+            temp.siguiente = nuevo
+        
+        self.tamanio += 1
     
-    def show(self):
-        if self.esta_vacia():
-            print("La lista esta vacia")
+    def buscar_por_id(self, identificador):
+        # recorro buscando el identificador
+        actual = self.cabeza
+        while actual is not None:
+            if actual.dato.id == identificador:
+                return actual.dato
+            actual = actual.siguiente
+        return None
+    
+    def quitar(self, identificador):
+        # si esta vacia no hago nada
+        if self.vacia():
+            return False
+        
+        # si es el primero
+        if self.cabeza.dato.id == identificador:
+            self.cabeza = self.cabeza.siguiente
+            self.tamanio -= 1
+            return True
+        
+        # busco en el resto
+        anterior = self.cabeza
+        actual = self.cabeza.siguiente
+        
+        while actual is not None:
+            if actual.dato.id == identificador:
+                anterior.siguiente = actual.siguiente
+                self.tamanio -= 1
+                return True
+            anterior = actual
+            actual = actual.siguiente
+        
+        return False
+    
+    def obtener_tamanio(self):
+        return self.tamanio
+    
+    def listar_todo(self):
+        # si no hay nada
+        if self.vacia():
+            print(">> Lista vacia")
             return
         
-        actual = self.primero
-        while actual is not None:
-            if hasattr(actual.dato, 'mostrar_informacion'):
-                actual.dato.mostrar_informacion()
-            else:
-                print(actual.dato)
-            actrual = actual.siguiente
-    
-    def find_b_id(self, id_buscado, atributo_id='id_centro'):
-        actual = self.primero
-        while actual is not None:
-            if getattr(acutal.dato, atributo_id):
-                if
+        # recorro mostrando
+        temp = self.cabeza
+        while temp is not None:
+            temp.dato.mostrar()
+            temp = temp.siguiente
