@@ -1,5 +1,5 @@
 #centros_datos.py
-from estructuras.listasimple import ListaSimple
+from estructuras.Lista_enlazada import ListaSimple
 
 class CentroDatos:
     
@@ -9,22 +9,21 @@ class CentroDatos:
         self.pais = pais
         self.ciudad = ciudad
         
-        # guardo los recursos totales del centro
         self.cpu_total = int(cpu)
         self.ram_total = int(ram)
         self.almacenamiento_total = int(almacenamiento)
         
-        # al principio todo esta disponible
         self.cpu_disp = int(cpu)
         self.ram_disp = int(ram)
         self.almacen_disp = int(almacenamiento)
         
-        # lista donde guardo las vms de este centro
+        self.cpu_disponible = int(cpu)
+        self.ram_disponible = int(ram)
+        
         self.vms = ListaSimple()
-        self.siguiente = None  #para cuando este en una lista enlazada
+        self.siguiente = None
     
     def uso_cpu_porcentaje(self):
-        # calculo cuanto cpu se esta usando en porcentaje
         if self.cpu_total == 0:
             return 0.0
         
@@ -32,8 +31,10 @@ class CentroDatos:
         porcentaje = (usado * 100.0) / self.cpu_total
         return porcentaje
     
+    def calcular_utilizacion_cpu(self):
+        return self.uso_cpu_porcentaje()
+    
     def uso_ram_porcentaje(self):
-        # lo mismo pero para ram
         if self.ram_total == 0:
             return 0.0
         
@@ -41,51 +42,69 @@ class CentroDatos:
         porcentaje = (usado * 100.0) / self.ram_total
         return porcentaje
     
+    def calcular_utilizacion_ram(self):
+        return self.uso_ram_porcentaje()
+    
     def hay_recursos_suficientes(self, cpu_req, ram_req, almac_req):
-        # verifico si tengo suficientes recursos para lo que me piden
         tiene_cpu = self.cpu_disp >= cpu_req
         tiene_ram = self.ram_disp >= ram_req
         tiene_almacen = self.almacen_disp >= almac_req
         
-        # si tengo todo retorno true
         if tiene_cpu and tiene_ram and tiene_almacen:
             return True
         else:
             return False
     
     def usar_recursos(self, cpu, ram, almac):
-        # cuando creo una vm resto los recursos
         self.cpu_disp -= cpu
         self.ram_disp -= ram
         self.almacen_disp -= almac
+        
+        self.cpu_disponible = self.cpu_disp
+        self.ram_disponible = self.ram_disp
     
     def devolver_recursos(self, cpu, ram, almac):
-        # cuando elimino una vm devuelvo los recursos
         self.cpu_disp += cpu
         self.ram_disp += ram
         self.almacen_disp += almac
+        
+        self.cpu_disponible = self.cpu_disp
+        self.ram_disponible = self.ram_disp
     
     def mostrar(self):
-        # muestro toda la info del centro
-        print(f"\n{'='*65}")
-        print(f"ID Centro: {self.id}")
-        print(f"Nombre: {self.nombre}")
-        print(f"Ubicacion: {self.ciudad}, {self.pais}")
+        separador = "=" * 65
+        print("")
+        print(separador)
+        texto_id = "ID Centro: " + self.id
+        print(texto_id)
+        texto_nombre = "Nombre: " + self.nombre
+        print(texto_nombre)
+        texto_ubicacion = "Ubicacion: " + self.ciudad + ", " + self.pais
+        print(texto_ubicacion)
         
-        print(f"\nRECURSOS:")
+        print("\nRECURSOS:")
         
-        # calculo y muestro cpu
         pct_cpu = self.uso_cpu_porcentaje()
-        print(f"  CPU: {self.cpu_disp}/{self.cpu_total} disponibles ({pct_cpu:.2f}% usado)")
+        cpu_disp_str = str(self.cpu_disp)
+        cpu_total_str = str(self.cpu_total)
+        pct_cpu_str = f"{pct_cpu:.2f}"
+        texto_cpu = "  CPU: " + cpu_disp_str + "/" + cpu_total_str + " disponibles (" + pct_cpu_str + "% usado)"
+        print(texto_cpu)
         
-        # calculo y muestro ram
         pct_ram = self.uso_ram_porcentaje()
-        print(f"  RAM: {self.ram_disp}/{self.ram_total} GB disponibles ({pct_ram:.2f}% usado)")
+        ram_disp_str = str(self.ram_disp)
+        ram_total_str = str(self.ram_total)
+        pct_ram_str = f"{pct_ram:.2f}"
+        texto_ram = "  RAM: " + ram_disp_str + "/" + ram_total_str + " GB disponibles (" + pct_ram_str + "% usado)"
+        print(texto_ram)
         
-        # almacenamiento
-        print(f"  Almacenamiento: {self.almacen_disp}/{self.almacenamiento_total} GB")
+        almacen_disp_str = str(self.almacen_disp)
+        almacen_total_str = str(self.almacenamiento_total)
+        texto_almacen = "  Almacenamiento: " + almacen_disp_str + "/" + almacen_total_str + " GB"
+        print(texto_almacen)
         
-        # cuento cuantas vms tiene
         num_vms = self.vms.obtener_tamanio()
-        print(f"VMs activas: {num_vms}")
-        print(f"{'='*65}")
+        num_vms_str = str(num_vms)
+        texto_vms = "VMs activas: " + num_vms_str
+        print(texto_vms)
+        print(separador)

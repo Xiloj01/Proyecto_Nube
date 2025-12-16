@@ -1,6 +1,6 @@
 #GestorSolicitudes.py
 from estructuras.ColaPrioridad import ColaPrioridad
-from modelos.solicitud import Solicitud
+from modelos.solicitud import solicitud
 
 class GestorSolicitudes:
     
@@ -8,132 +8,125 @@ class GestorSolicitudes:
         self.cola = ColaPrioridad()
         self.gestor_centros = gestor_centros
         self.gestor_vms = gestor_vms
-        self.procesadas = []  #aca guardo las que ya procese
+        self.procesadas = []
     
     def nueva_solicitud(self, id_sol, cliente, tipo, prioridad, cpu, ram, almac, tiempo):
-        # creo la solicitud nueva
-        sol = Solicitud(id_sol, cliente, tipo, prioridad, cpu, ram, almac, tiempo)
-        # la meto en la cola
+        sol = solicitud(id_sol, cliente, tipo, prioridad, cpu, ram, almac, tiempo)
         self.cola.encolar(sol)
-        msg = f"Solicitud {id_sol} agregada (prioridad {prioridad})"
+        msg = "Solicitud " + id_sol + " agregada (prioridad " + str(prioridad) + ")"
         return True, msg
     
     def procesar_una(self):
-        # verifico que haya solicitudes
         if self.cola.vacia():
             return False, "Cola vacia"
         
-        # saco la de mayor prioridad
         sol = self.cola.desencolar()
         
-        # dependiendo del tipo hago diferentes cosas
         if sol.tipo == "Deploy":
             resultado = self._hacer_deploy(sol)
         elif sol.tipo == "Backup":
             resultado = self._hacer_backup(sol)
         else:
-            resultado = (False, f"Tipo desconocido: {sol.tipo}")
+            msg = "Tipo desconocido: " + sol.tipo
+            resultado = (False, msg)
         
-        # si funciono la guardo en procesadas
         if resultado[0]:
             self.procesadas.append(sol)
         
         return resultado
     
     def procesar_varias(self, cantidad):
-        # verifico que haya solicitudes
         if self.cola.vacia():
             return False, "Cola vacia"
         
-        # listas para guardar resultados
         procesadas_ok = []
         procesadas_fail = []
         
-        # proceso N solicitudes
         for i in range(cantidad):
-            # si ya no hay mas salgo del ciclo
             if self.cola.vacia():
                 break
             
-            # proceso una solicitud
             exito, msg = self.procesar_una()
             if exito:
                 procesadas_ok.append(msg)
             else:
                 procesadas_fail.append(msg)
         
-        # muestro resultados en pantalla
-        print(f"\n{'='*70}")
-        print(f"  PROCESAMIENTO DE SOLICITUDES")
-        print(f"{'='*70}")
-        print(f"Exitosas: {len(procesadas_ok)}")
+        separador = "=" * 70
+        print("")
+        print(separador)
+        print("  PROCESAMIENTO DE SOLICITUDES")
+        print(separador)
+        exitosas_str = str(len(procesadas_ok))
+        print("Exitosas: " + exitosas_str)
         for msg in procesadas_ok:
-            print(f"  ✓ {msg}")
+            texto = "  ✓ " + msg
+            print(texto)
         
-        # si hubo fallidas las muestro
         if procesadas_fail:
-            print(f"\nFallidas: {len(procesadas_fail)}")
+            fallidas_str = str(len(procesadas_fail))
+            print("\nFallidas: " + fallidas_str)
             for msg in procesadas_fail:
-                print(f"  ✗ {msg}")
+                texto = "  ✗ " + msg
+                print(texto)
         
-        return True, f"Procesadas {len(procesadas_ok)} solicitudes"
+        procesadas_num = str(len(procesadas_ok))
+        msg_final = "Procesadas " + procesadas_num + " solicitudes"
+        return True, msg_final
     
     def _hacer_deploy(self, sol):
-        # busco el centro que tenga mas recursos disponibles
         centro = self.gestor_centros.centro_con_mayor_disponibilidad()
         if centro is None:
-            return False, f"Deploy {sol.id}: Sin centros"
+            msg = "Deploy " + sol.id + ": Sin centros"
+            return False, msg
         
-        # genero los datos para crear la vm nueva
         id_nueva_vm = sol.id
-        nombre_vm = f"VM-{sol.cliente}"
+        nombre_vm = "VM-" + sol.cliente
         so_default = "Ubuntu 22.04 LTS"
         
-        # genero una ip automatica
         total_vms = self.gestor_vms.todas_vms.obtener_tamanio()
-        ip_nueva = f"192.168.1.{100 + total_vms}"
+        numero_ip = 100 + total_vms
+        ip_nueva = "192.168.1." + str(numero_ip)
         
-        # intento crear la vm en el centro
         exito, msg = self.gestor_vms.agregar_vm(
             id_nueva_vm, nombre_vm, so_default, ip_nueva,
             sol.cpu_necesario, sol.ram_necesaria, sol.almacen_necesario,
             centro.id
         )
         
-        # verifico si funciono
         if exito:
-            return True, f"Deploy {sol.id}: VM en {centro.id} para {sol.cliente}"
+            msg_final = "Deploy " + sol.id + ": VM en " + centro.id + " para " + sol.cliente
+            return True, msg_final
         else:
-            return False, f"Deploy {sol.id}: {msg}"
+            msg_error = "Deploy " + sol.id + ": " + msg
+            return False, msg_error
     
     def _hacer_backup(self, sol):
-        # busco el centro con mas espacio libre
         centro = self.gestor_centros.centro_con_mayor_disponibilidad()
         if centro is None:
-            return False, f"Backup {sol.id}: Sin centros"
+            msg = "Backup " + sol.id + ": Sin centros"
+            return False, msg
         
-        # datos para la vm de backup
         id_nueva_vm = sol.id
-        nombre_vm = f"Backup-{sol.cliente}"
+        nombre_vm = "Backup-" + sol.cliente
         so_default = "Ubuntu 22.04 LTS"
         
-        # para backups uso otra red (192.168.2.x)
         total_vms = self.gestor_vms.todas_vms.obtener_tamanio()
-        ip_nueva = f"192.168.2.{100 + total_vms}"
+        numero_ip = 100 + total_vms
+        ip_nueva = "192.168.2." + str(numero_ip)
         
-        # creo la vm para el backup
         exito, msg = self.gestor_vms.agregar_vm(
             id_nueva_vm, nombre_vm, so_default, ip_nueva,
             sol.cpu_necesario, sol.ram_necesaria, sol.almacen_necesario,
             centro.id
         )
         
-        # chequeo resultado
         if exito:
-            return True, f"Backup {sol.id}: VM suspendida en {centro.id}"
+            msg_final = "Backup " + sol.id + ": VM suspendida en " + centro.id
+            return True, msg_final
         else:
-            return False, f"Backup {sol.id}: {msg}"
+            msg_error = "Backup " + sol.id + ": " + msg
+            return False, msg_error
     
     def ver_cola(self):
-        # retorno la cola completa
         return self.cola

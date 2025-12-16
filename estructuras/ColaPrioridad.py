@@ -1,41 +1,49 @@
+#ColaPrioridad.py
 from estructuras.nodos import Nodo
 
 class ColaPrioridad:
-    """Cola de prioridad - mayor numero = mas urgente"""
     
     def __init__(self):
         self.frente = None
         self.cantidad = 0
     
     def vacia(self):
-        return self.frente is None
+        esta_vacia = self.frente is None
+        return esta_vacia
     
     def encolar(self, elemento):
-        """Inserta por prioridad"""
         nodo_nuevo = Nodo(elemento)
         
-        # si vacia o es mas prioritario
-        if self.vacia() or elemento.prioridad > self.frente.dato.prioridad:
+        if self.vacia():
             nodo_nuevo.siguiente = self.frente
             self.frente = nodo_nuevo
         else:
-            # buscar posicion
-            temp = self.frente
-            while (temp.siguiente is not None and 
-                   temp.siguiente.dato.prioridad >= elemento.prioridad):
-                temp = temp.siguiente
-            nodo_nuevo.siguiente = temp.siguiente
-            temp.siguiente = nodo_nuevo
+            prioridad_elemento = elemento.prioridad
+            prioridad_frente = self.frente.dato.prioridad
+            
+            if prioridad_elemento > prioridad_frente:
+                nodo_nuevo.siguiente = self.frente
+                self.frente = nodo_nuevo
+            else:
+                temp = self.frente
+                while temp.siguiente is not None:
+                    prioridad_siguiente = temp.siguiente.dato.prioridad
+                    if prioridad_siguiente < prioridad_elemento:
+                        break
+                    temp = temp.siguiente
+                
+                nodo_nuevo.siguiente = temp.siguiente
+                temp.siguiente = nodo_nuevo
         
-        self.cantidad += 1
+        self.cantidad = self.cantidad + 1
     
     def desencolar(self):
-        """Saca el mas prioritario"""
         if self.vacia():
             return None
+        
         elemento = self.frente.dato
         self.frente = self.frente.siguiente
-        self.cantidad -= 1
+        self.cantidad = self.cantidad - 1
         return elemento
     
     def ver_frente(self):
@@ -44,20 +52,26 @@ class ColaPrioridad:
         return self.frente.dato
     
     def mostrar_cola(self):
-        """Muestra la cola completa"""
         if self.vacia():
             print("\n>> Cola vacia")
             return
         
-        print(f"\n{'='*70}")
-        print(f"  COLA DE SOLICITUDES - {self.cantidad} pendiente(s)")
-        print(f"{'='*70}")
+        separador = "=" * 70
+        print("")
+        print(separador)
+        cantidad_str = str(self.cantidad)
+        titulo = "  COLA DE SOLICITUDES - " + cantidad_str + " pendiente(s)"
+        print(titulo)
+        print(separador)
+        
         temp = self.frente
         pos = 1
         while temp is not None:
-            print(f"\n[Posicion {pos}]")
+            pos_str = str(pos)
+            texto_pos = "\n[Posicion " + pos_str + "]"
+            print(texto_pos)
             temp.dato.mostrar()
             temp = temp.siguiente
-            pos += 1
-        print(f"{'='*70}")
-
+            pos = pos + 1
+        
+        print(separador)

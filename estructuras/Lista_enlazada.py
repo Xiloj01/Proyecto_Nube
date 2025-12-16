@@ -1,3 +1,4 @@
+#Lista_enlazada.py
 from estructuras.nodos import Nodo
 
 class ListaSimple:
@@ -5,28 +6,27 @@ class ListaSimple:
     def __init__(self):
         self.cabeza = None
         self.tamanio = 0
+        self.primero = None
     
     def vacia(self):
-        return self.cabeza is None
+        esta_vacia = self.cabeza is None
+        return esta_vacia
     
     def insertar(self, elemento):
-        # ve si hay un nodo
         nuevo = Nodo(elemento)
         
-        # si no hay nada lo pongo de primero
         if self.vacia():
             self.cabeza = nuevo
+            self.primero = nuevo
         else:
-            # si hay elementos voy al final
             temp = self.cabeza
             while temp.siguiente is not None:
                 temp = temp.siguiente
             temp.siguiente = nuevo
         
-        self.tamanio += 1
+        self.tamanio = self.tamanio + 1
     
     def buscar_por_id(self, identificador):
-        # recorro buscando el identificador
         actual = self.cabeza
         while actual is not None:
             if actual.dato.id == identificador:
@@ -35,24 +35,22 @@ class ListaSimple:
         return None
     
     def quitar(self, identificador):
-        # si esta vacia no hago nada
         if self.vacia():
             return False
         
-        # si es el primero
         if self.cabeza.dato.id == identificador:
             self.cabeza = self.cabeza.siguiente
-            self.tamanio -= 1
+            self.primero = self.cabeza
+            self.tamanio = self.tamanio - 1
             return True
         
-        # busco en el resto
         anterior = self.cabeza
         actual = self.cabeza.siguiente
         
         while actual is not None:
             if actual.dato.id == identificador:
                 anterior.siguiente = actual.siguiente
-                self.tamanio -= 1
+                self.tamanio = self.tamanio - 1
                 return True
             anterior = actual
             actual = actual.siguiente
@@ -63,12 +61,10 @@ class ListaSimple:
         return self.tamanio
     
     def listar_todo(self):
-        # si no hay nada
         if self.vacia():
             print(">> Lista vacia")
             return
         
-        # recorro mostrando
         temp = self.cabeza
         while temp is not None:
             temp.dato.mostrar()

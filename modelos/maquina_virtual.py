@@ -1,5 +1,5 @@
 #maquina_virtual.py
-from estructuras.listasimple import ListaSimple
+from estructuras.listasimple import ListaSimpleEnlazada
 
 class MaquinaVirtual:
     
@@ -23,7 +23,7 @@ class MaquinaVirtual:
         self.id_centro = id_centro
         
         # lista de contenedores que tengo
-        self.contenedores = ListaSimple()
+        self.contenedores = ListaSimpleEnlazada()
         self.siguiente = None
     
     def porcentaje_cpu_usado(self):

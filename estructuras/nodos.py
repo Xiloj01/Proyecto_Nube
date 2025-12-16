@@ -3,7 +3,6 @@ class Nodo:
         self.dato = valor
         self.siguiente = None
 
-
 class NodoSimple:
     def __init__(self, elemento):
         self.dato = elemento

@@ -64,7 +64,7 @@ class ListaSimpleEnlazada:
         self.tamanio -= 1
         return dato_eliminado
 
-    def buscar(self, clave_busqueda, comparador):
+    def buscar_por_id(self, clave_busqueda, comparador):
         """Busca un nodo en la lista usando una función comparadora"""
         actual = self.primero
         while actual is not None:
